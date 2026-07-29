@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tobi Nailed It | Your Friendly Neighborhood Nail Tech</title>
+<meta name="description" content="Salon-quality gel, gel x, polygel, acrylic and BIAB nail sets in Lagos. Book your appointment with Tobi Nailed It." />
+<style>
+  :root{
+    --bg:#FDF8F6; --ink:#17141A; --pink:#FF2E7E; --blush:#FFE3EE; --rose:#B4607C; --white:#fff;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);}
+  h1,h2,h3{font-family:Georgia,serif;margin:0;}
+  .script{font-family:'Brush Script MT',cursive;color:var(--pink);font-weight:400;}
+  button{font-family:inherit;cursor:pointer;}
+  a{color:inherit;}
+  .page{display:none;}
+  .page.active{display:block;}
+
+  /* NAV */
+  nav.topnav{position:sticky;top:0;z-index:50;background:rgba(253,248,246,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--blush);}
+  .nav-inner{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+  .logo-btn{background:none;border:none;font-weight:900;font-size:20px;letter-spacing:-0.02em;display:flex;align-items:center;gap:6px;}
+  .logo-btn .script{font-size:26px;}
+  .nav-links{display:flex;gap:26px;}
+  .nav-links button{background:none;border:none;font-size:14px;font-weight:500;color:var(--ink);padding:6px 2px;border-bottom:2px solid transparent;}
+  .nav-links button.active{font-weight:700;color:var(--pink);border-bottom:2px solid var(--pink);}
+  .hamburger{display:none;background:none;border:1.5px solid var(--ink);border-radius:6px;width:36px;height:32px;font-size:16px;}
+  .mobile-menu{display:none;flex-direction:column;padding:8px 20px 16px;gap:4px;border-top:1px solid var(--blush);}
+  .mobile-menu button{background:none;border:none;text-align:left;padding:10px 4px;font-size:15px;font-weight:500;color:var(--ink);}
+  .mobile-menu button.active{font-weight:700;color:var(--pink);}
+  @media(max-width:760px){
+    .nav-links{display:none;}
+    .hamburger{display:flex;align-items:center;justify-content:center;}
+  }
+
+  /* TICKER */
+  .ticker{background:var(--ink);color:#fff;overflow:hidden;white-space:nowrap;padding:10px 0;}
+  .ticker-track{display:inline-block;animation:scrollLeft 28s linear infinite;}
+  .ticker-track span{margin-right:28px;font-size:13px;letter-spacing:0.04em;}
+  @keyframes scrollLeft{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media(prefers-reduced-motion:reduce){.ticker-track{animation:none;}}
+
+  /* BUTTONS */
+  .btn-primary{background:var(--pink);color:#fff;border:none;padding:13px 26px;border-radius:999px;font-size:14.5px;font-weight:700;text-decoration:none;display:inline-block;}
+  .btn-ghost{background:transparent;color:#fff;border:1.5px solid #fff;padding:13px 26px;border-radius:999px;font-size:14.5px;font-weight:700;}
+  .link-arrow{background:none;border:none;color:var(--pink);font-weight:700;font-size:13.5px;padding:0;}
+
+  /* HERO */
+  .hero{position:relative;min-height:86vh;display:flex;align-items:flex-end;overflow:hidden;}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;}
+  .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,20,26,0.05) 0%,rgba(23,20,26,0.75) 85%);}
+  .hero-content{position:relative;z-index:2;padding:0 24px 56px;max-width:780px;margin:0 auto;width:100%;color:#fff;}
+  .hero-content h1{font-weight:900;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.02;letter-spacing:-0.02em;}
+  .hero-content p{margin-top:18px;font-size:16.5px;max-width:460px;color:#f1e9ec;line-height:1.55;}
+  .hero-ctas{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;}
+
+  /* SECTIONS */
+  .section{padding:72px 24px;max-width:900px;margin:0 auto;text-align:center;}
+  .eyebrow{font-size:12px;letter-spacing:0.14em;color:var(--pink);font-weight:700;margin-bottom:14px;}
+  .section h2{font-weight:800;font-size:clamp(1.5rem,3.4vw,2.2rem);line-height:1.25;}
+  .section p.body{color:var(--rose);font-size:15.5px;margin-top:16px;line-height:1.7;max-width:620px;margin-inline:auto;}
+
+  .band{background:var(--blush);padding:72px 24px;}
+  .band-inner{max-width:1100px;margin:0 auto;}
+  .band-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:34px;}
+
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;}
+  .card{background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 4px 18px rgba(23,20,26,0.06);}
+  .card .imgwrap{position:relative;height:260px;overflow:hidden;}
+  .card .imgwrap img{width:100%;height:100%;object-fit:cover;}
+  .card .body-pad{padding:18px 18px 22px;}
+  .card h3{font-weight:800;font-size:19px;margin:0 0 6px;}
+  .card p{font-size:13.5px;color:var(--rose);margin:0 0 10px;line-height:1.5;}
+  .card .price{font-size:13px;font-weight:700;color:var(--pink);}
+  .nailtip{display:inline-block;width:14px;height:14px;background:var(--pink);clip-path:polygon(50% 0%,100% 100%,0% 100%);}
+
+  .academy-teaser{padding:76px 24px;max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px;align-items:center;}
+  .academy-teaser .imgs{flex:1 1 280px;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .academy-teaser .imgs img{width:100%;height:220px;object-fit:cover;border-radius:4px;}
+  .academy-teaser .imgs img:first-child{margin-top:30px;}
+  .academy-teaser .text{flex:1 1 320px;}
+  .academy-teaser .text p{color:var(--rose);font-size:15px;line-height:1.7;max-width:480px;}
+
+  /* ABOUT */
+  .about-wrap{max-width:760px;margin:0 auto;padding:64px 24px 88px;}
+  .about-wrap h1{font-weight:900;font-size:clamp(2rem,5vw,2.8rem);line-height:1.1;margin:0 0 26px;}
+  .about-body{font-size:16.5px;line-height:1.8;color:#3a3540;}
+  .about-body p{margin:0 0 18px;}
+  .stat-grid{margin-top:48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;}
+  .stat{background:var(--blush);border-radius:4px;padding:22px 18px;text-align:center;}
+  .stat .num{font-weight:900;font-size:26px;color:var(--pink);}
+  .stat .lbl{font-size:12.5px;color:var(--rose);margin-top:4px;}
+
+  /* SERVICES / PRICE TABLES */
+  .services-wrap{max-width:900px;margin:0 auto;padding:64px 24px 40px;}
+  .services-wrap h1{font-weight:900;font-size:clamp(1.9rem,4.6vw,2.6rem);margin:0 0 10px;}
+  .services-wrap > p.intro{color:var(--rose);font-size:15px;margin-bottom:40px;}
+  .price-table{margin-bottom:34px;}
+  .price-table h3{font-weight:800;font-size:19px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .price-table h3 .nailtip{width:10px;height:10px;}
+  .price-table .rows{border:1px solid var(--blush);border-radius:6px;overflow:hidden;}
+  .price-row{display:flex;justify-content:space-between;padding:11px 16px;font-size:14.5px;}
+  .price-row:nth-child(odd){background:#fff;}
+  .price-row:nth-child(even){background:var(--blush);}
+  .price-row .val{font-weight:700;}
+
+  /* GALLERY */
+  .gallery-wrap{max-width:1100px;margin:0 auto;padding:64px 24px 40px;}
+  .gallery-wrap h1{font-weight:900;font-size:clamp(1.9rem,4.6vw,2.6rem);margin:0 0 40px;}
+  .gallery-group{margin-bottom:46px;}
+  .gallery-group h3{font-weight:800;font-size:20px;margin-bottom:16px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+  .gallery-grid .photo{border-radius:4px;overflow:hidden;aspect-ratio:3/4;}
+  .gallery-grid .photo img{width:100%;height:100%;object-fit:cover;}
+
+  /* ACADEMY PAGE */
+  .academy-wrap{max-width:900px;margin:0 auto;padding:64px 24px 40px;}
+  .academy-wrap h1{font-weight:900;font-size:clamp(1.9rem,4.6vw,2.6rem);margin:0 0 14px;}
+  .academy-wrap > p.intro{color:var(--rose);font-size:15.5px;line-height:1.7;margin-bottom:40px;max-width:620px;}
+
+  /* BOOK PAGE */
+  .book-wrap{max-width:900px;margin:0 auto;padding:64px 24px 88px;}
+  .book-wrap h1{font-weight:900;font-size:clamp(1.9rem,4.6vw,2.6rem);margin:0 0 10px;}
+  .book-wrap > p.intro{color:var(--rose);font-size:15px;margin-bottom:36px;}
+  .book-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;}
+  .label{display:block;font-size:12.5px;font-weight:700;margin-bottom:8px;letter-spacing:0.02em;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .chip{padding:8px 14px;border-radius:999px;border:1.5px solid var(--blush);background:#fff;color:var(--ink);font-size:13.5px;font-weight:600;}
+  .chip.active{border-color:var(--pink);background:var(--pink);color:#fff;}
+  .chip.extra{padding:7px 12px;font-size:12.5px;font-weight:400;}
+  .chip.extra.active{background:var(--blush);color:var(--ink);border-color:var(--pink);}
+  select, input, textarea{width:100%;padding:11px 14px;border-radius:6px;border:1.5px solid var(--blush);font-size:14.5px;background:#fff;color:var(--ink);font-family:inherit;}
+  textarea{resize:vertical;}
+  .total-box{margin-top:26px;background:var(--ink);color:#fff;border-radius:8px;padding:20px 22px;}
+  .total-box .lbl{font-size:12px;letter-spacing:0.08em;color:#e3a4bd;}
+  .total-box .amt{font-weight:900;font-size:32px;margin-top:4px;}
+  .total-box .sub{font-size:12px;color:#c9c0c5;margin-top:6px;}
+  .confirm-box{background:var(--blush);border-radius:8px;padding:24px 22px;}
+  .confirm-box h3{font-weight:800;font-size:18px;margin:0 0 10px;}
+  .confirm-box p{font-size:14px;color:#3a3540;line-height:1.6;margin-bottom:18px;}
+  .edit-link{background:none;border:none;color:var(--rose);font-size:13px;margin-top:14px;text-decoration:underline;}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#fff;padding:48px 20px 28px;}
+  .footer-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between;}
+  .footer-col h4{font-size:12px;letter-spacing:0.08em;color:var(--pink);margin-bottom:10px;font-weight:700;}
+  .footer-col button, .footer-col a{background:none;border:none;color:#efe7ea;padding:4px 0;font-size:13.5px;display:block;text-decoration:none;}
+  .footer-bottom{max-width:1100px;margin:30px auto 0;border-top:1px solid #33303a;padding-top:16px;font-size:12px;color:#8f8790;}
+
+  /* WHATSAPP FAB */
+  .wa-fab{position:fixed;bottom:22px;right:22px;z-index:60;background:var(--pink);color:#fff;border-radius:999px;padding:13px 18px;font-size:13.5px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(255,46,126,0.35);display:flex;align-items:center;gap:8px;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <button class="logo-btn" onclick="goPage('home')">TOBI <span class="script">Nailed</span> IT</button>
+    <div class="nav-links" id="navLinksDesktop"></div>
+    <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu"></div>
+</nav>
+
+<div id="app"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col" style="max-width:320px;">
+      <div style="font-weight:900;font-size:22px;font-family:Georgia,serif;">TOBI <span class="script">Nailed</span> IT</div>
+      <p style="color:#cfc5ca;font-size:13.5px;margin-top:10px;line-height:1.6;">Your friendly neighborhood nail tech. Salon-quality sets, zero stiff salon energy.</p>
+    </div>
+    <div class="footer-col">
+      <h4>EXPLORE</h4>
+      <button onclick="goPage('home')">Home</button>
+      <button onclick="goPage('about')">About</button>
+      <button onclick="goPage('services')">Services</button>
+      <button onclick="goPage('gallery')">Gallery</button>
+      <button onclick="goPage('academy')">TNI Academy</button>
+    </div>
+    <div class="footer-col">
+      <h4>CONTACT</h4>
+      <a href="https://wa.me/message/VM3322AX2FEWG1" target="_blank">Chat on WhatsApp →</a>
+      <div style="color:#cfc5ca;font-size:13.5px;margin-top:8px;">0702 648 1420</div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Tobi Nailed It. Made with love (and a lot of gel).</div>
+</footer>
+
+<a class="wa-fab" href="https://wa.me/message/VM3322AX2FEWG1" target="_blank">💬 Chat on WhatsApp</a>
+
+<script>
+/* ============ DATA ============ */
+const IMAGES = {
+  "gel-1": "gel-1.jpeg", "gel-2": "gel-2.jpeg",
+  "gelx-1": "gelx-1.jpeg", "gelx-2": "gelx-2.jpeg",
+  "biab-1": "biab-1.jpeg", "biab-2": "biab-2.jpeg",
+  "polygel-1": "polygel-1.jpeg", "polygel-2": "polygel-2.jpeg",
+  "acrylic-1": "acrylic-1.jpeg", "acrylic-2": "acrylic-2.jpeg"
+};
+
+const PRICES = {
+  gel:     { label:'Signature Gel', options:{ 'Natural':5000,'Short':7000,'Medium':10000,'Long':13000,'XL':16000,'XXL':19000 } },
+  gelx:    { label:'Gel X', options:{ 'Short':10000,'Medium':13000,'Long':16000,'XL':19000,'XXL':23000 } },
+  biab:    { label:'BIAB', options:{ 'Natural':7000,'Short Ext.':10000,'Medium Ext.':13000 } },
+  polygel: { label:'Polygel', options:{ 'Overlay':7000,'Short':10000,'Medium':13000,'Long':16000,'XL':20000,'XXL':24000 } },
+  acrylic: { label:'Acrylic', options:{ 'Overlay':7000,'Short':10000,'Medium':13000,'Long':16000,'XL':20000,'XXL':24000 } },
+};
+const EXTRAS = { 'Nail Art':200,'French Tip':200,'Ombré':300,'Chrome':300,'Marble':200,'3D Design':500,'Aura':200,'Charms':300,'Cat Eye':300,'Encapsulation':500,'Single Stone':100 };
+const TOE_PRICES = { 'Toes — Gel/Plain':3000,'Toes — Acrylic/Polygel':7000,'Fixing All Toes (Gel)':5000,'Fixing Big Toe Only':4000 };
+const REMOVAL_PRICES = { 'Soak Off (Polygel/Acrylic)':5000,'Gel Removal':3000 };
+
+function naira(n){ return '₦' + n.toLocaleString('en-NG'); }
+
+/* ============ NAV ============ */
+const NAV_ITEMS = [['home','Home'],['about','About'],['services','Services'],['gallery','Gallery'],['academy','TNI Academy'],['book','Book']];
+let currentPage = 'home';
+
+function renderNav(){
+  const desktop = document.getElementById('navLinksDesktop');
+  const mobile = document.getElementById('mobileMenu');
+  desktop.innerHTML = '';
+  mobile.innerHTML = '';
+  NAV_ITEMS.forEach(([key,label])=>{
+    const b1 = document.createElement('button');
+    b1.textContent = label;
+    b1.className = key===currentPage ? 'active' : '';
+    b1.onclick = ()=>goPage(key);
+    desktop.appendChild(b1);
+
+    const b2 = document.createElement('button');
+    b2.textContent = label;
+    b2.className = key===currentPage ? 'active' : '';
+    b2.onclick = ()=>{ goPage(key); toggleMobileMenu(true); };
+    mobile.appendChild(b2);
+  });
+}
+function toggleMobileMenu(forceClose){
+  const m = document.getElementById('mobileMenu');
+  if(forceClose){ m.style.display='none'; return; }
+  m.style.display = (m.style.display==='flex') ? 'none' : 'flex';
+}
+
+function goPage(key){
+  currentPage = key;
+  renderNav();
+  renderApp();
+  window.scrollTo(0,0);
+}
+
+/* ============ TICKER ============ */
+function tickerHTML(){
+  const items = ['60+ Loyal Clients','Trained Under a Mentor','Signature Gel · Gel X · Polygel · Acrylic · BIAB','Emmy London Brand Ambassador','Book on WhatsApp','Your Friendly Neighborhood Nail Tech'];
+  const full = items.concat(items);
+  return `<div class="ticker"><div class="ticker-track">${full.map(t=>`<span><span style="color:var(--pink)">●</span> ${t}</span>`).join('')}</div></div>`;
+}
+
+/* ============ HOME ============ */
+function homeHTML(){
+  const featured = [
+    { key:'gelx', title:'Gel X', img:IMAGES['gelx-1'], desc:'Lightweight, natural-looking extensions built to last.', from:10000 },
+    { key:'polygel', title:'Polygel', img:IMAGES['polygel-1'], desc:'Flexible strength with a seamless, glass-like finish.', from:7000 },
+    { key:'acrylic', title:'Acrylic', img:IMAGES['acrylic-1'], desc:'Sculpted, durable, and shaped exactly how you like.', from:7000 },
+  ];
+  return `
+    <section class="hero">
+      <img src="${IMAGES['acrylic-2']}" alt="Nail set by Tobi Nailed It" />
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Your nails,<br/>handled. <span class="script">Literally.</span></h1>
+        <p>Salon-quality sets, zero stiff salon energy. Come as you are — leave obsessed with your hands.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="goPage('book')">Book Your Set</button>
+          <button class="btn-ghost" onclick="goPage('gallery')">See the Work</button>
+        </div>
+      </div>
+    </section>
+    ${tickerHTML()}
+    <section class="section">
+      <div class="eyebrow">THE PHILOSOPHY</div>
+      <h2>Good nails shouldn't feel like a formal appointment.</h2>
+      <p class="body">Four years in, trained under a mentor who taught the fundamentals right — every set at Tobi Nailed It is built on real technique, not shortcuts. Relaxed vibe, serious craft.</p>
+      <button class="link-arrow" style="margin-top:18px;" onclick="goPage('about')">Read the full story →</button>
+    </section>
+    <section class="band">
+      <div class="band-inner">
+        <div class="band-head">
+          <div>
+            <div class="eyebrow">WHAT I DO BEST</div>
+            <h2>The signature sets</h2>
+          </div>
+          <button class="link-arrow" onclick="goPage('services')">View full price list →</button>
+        </div>
+        <div class="grid3">
+          ${featured.map(f=>`
+            <div class="card">
+              <div class="imgwrap">
+                <img src="${f.img}" alt="${f.title}" />
+                <div style="position:absolute;top:12px;left:12px;"><span class="nailtip"></span></div>
+              </div>
+              <div class="body-pad">
+                <h3>${f.title}</h3>
+                <p>${f.desc}</p>
+                <div class="price">Starting ${naira(f.from)}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+    <section class="academy-teaser">
+      <div class="text">
+        <div class="eyebrow">TNI ACADEMY</div>
+        <h2>Learn the craft. Build the career.</h2>
+        <p>In-person and online technique classes for aspiring nail techs — from single-skill intensives to full certification packages.</p>
+        <button class="btn-primary" style="margin-top:20px;" onclick="goPage('academy')">Explore TNI Academy</button>
+      </div>
+      <div class="imgs">
+        <img src="${IMAGES['gel-2']}" alt="Nail technique" />
+        <img src="${IMAGES['biab-2']}" alt="Nail technique" />
+      </div>
+    </section>
+  `;
+}
+
+/* ============ ABOUT ============ */
+function aboutHTML(){
+  return `
+    <div class="about-wrap">
+      <div class="eyebrow">ABOUT</div>
+      <h1>Trained right. Four years deep.<br/><span class="script">Still obsessed.</span></h1>
+      <div class="about-body">
+        <p>I'm Tobi — nail tech, LASU alumna, and your friendly neighborhood nail tech. I trained under a mentor who taught me the fundamentals from day one, and I've been sharpening that craft for four years since.</p>
+        <p>Tobi Nailed It is a salon built on that same foundation: skill first, no shortcuts, no judgment. No stiff salon energy here — just real technique, real consistency, and someone who genuinely loves this work.</p>
+        <p>Come as you are. Leave obsessed with your hands.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="num">4 yrs</div><div class="lbl">In the craft</div></div>
+        <div class="stat"><div class="num">60+</div><div class="lbl">Loyal clients</div></div>
+        <div class="stat"><div class="num">5</div><div class="lbl">Core techniques</div></div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============ SERVICES ============ */
+function priceTableHTML(title, options, perNail){
+  const rows = Object.entries(options).map(([k,v])=>`
+    <div class="price-row"><span>${k}</span><span class="val">${naira(v)}${perNail?'/nail':''}</span></div>
+  `).join('');
+  return `
+    <div class="price-table">
+      <h3><span class="nailtip"></span> ${title}${perNail?' <span style=\"font-size:12px;font-weight:400;color:var(--rose);\">(priced per nail)</span>':''}</h3>
+      <div class="rows">${rows}</div>
+    </div>
+  `;
+}
+
+function servicesHTML(){
+  return `
+    <div class="services-wrap">
+      <div class="eyebrow">SERVICES</div>
+      <h1>The full price list</h1>
+      <p class="intro">Every set is built to order — pick a base, add the extras, and I'll take it from there.</p>
+      ${priceTableHTML('Gel X', PRICES.gelx.options)}
+      ${priceTableHTML('Polygel', PRICES.polygel.options)}
+      ${priceTableHTML('Acrylic', PRICES.acrylic.options)}
+      ${priceTableHTML('BIAB', PRICES.biab.options)}
+      ${priceTableHTML('Signature Gel', PRICES.gel.options)}
+      ${priceTableHTML('Toes', TOE_PRICES)}
+      ${priceTableHTML('Removal', REMOVAL_PRICES)}
+      ${priceTableHTML('Nail Art Extras', EXTRAS, true)}
+      <div style="text-align:center;margin-top:40px;">
+        <button class="btn-primary" onclick="goPage('book')">Get a Live Estimate &amp; Book</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============ GALLERY ============ */
+function galleryGroupHTML(title, imgs){
+  return `
+    <div class="gallery-group">
+      <h3>${title}</h3>
+      <div class="gallery-grid">
+        ${imgs.map((src,i)=>`<div class="photo"><img src="${src}" alt="${title} set ${i+1}" /></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+function galleryHTML(){
+  return `
+    <div class="gallery-wrap">
+      <div class="eyebrow">GALLERY</div>
+      <h1>The work, by technique</h1>
+      ${galleryGroupHTML('Gel X', [IMAGES['gelx-1'], IMAGES['gelx-2']])}
+      ${galleryGroupHTML('Polygel', [IMAGES['polygel-1'], IMAGES['polygel-2']])}
+      ${galleryGroupHTML('Acrylic', [IMAGES['acrylic-1'], IMAGES['acrylic-2']])}
+      ${galleryGroupHTML('BIAB', [IMAGES['biab-1'], IMAGES['biab-2']])}
+      ${galleryGroupHTML('Signature Gel', [IMAGES['gel-1'], IMAGES['gel-2']])}
+    </div>
+  `;
+}
+
+/* ============ ACADEMY ============ */
+function academyHTML(){
+  const singles = { 'Gel':15000,'Gel Press-on':15000,'Gel X':25000,'Acrylics':20000,'Polygel':25000,'BIAB / Hard Gel / Rubber Base':25000,'Nail Designs':20000 };
+  const physical = { '4 Weeks':100000,'8 Weeks':150000,'12 Weeks':200000 };
+  const online = { '4 Weeks':150000,'6 Weeks':200000 };
+  return `
+    <div class="academy-wrap">
+      <div class="eyebrow">TNI ACADEMY</div>
+      <h1>Learn the craft. Build a career.</h1>
+      <p class="intro">Individual technique intensives or full certification packages — in person or online. Every class is taught the same way I was trained: fundamentals first, precision always.</p>
+      ${priceTableHTML('Individual Technique Classes (2-Week Intensive, Online)', singles)}
+      ${priceTableHTML('Full Physical Package', physical)}
+      ${priceTableHTML('Full Online Package', online)}
+      <div style="text-align:center;margin-top:36px;">
+        <a class="btn-primary" href="https://wa.me/message/VM3322AX2FEWG1" target="_blank">Ask About Enrolling</a>
+      </div>
+    </div>
+  `;
+}
+
+/* ============ BOOK (calculator + form) ============ */
+let bookState = { category:'gelx', option:null, extras:[], name:'', date:'', notes:'', submitted:false };
+bookState.option = Object.keys(PRICES[bookState.category].options)[0];
+
+function bookHTML(){
+  const base = PRICES[bookState.category].options[bookState.option] || 0;
+  const extrasTotal = bookState.extras.reduce((s,e)=>s+EXTRAS[e],0);
+  const total = base + extrasTotal;
+
+  const categoryChips = Object.keys(PRICES).map(catKey=>`
+    <button class="chip ${bookState.category===catKey?'active':''}" onclick="setBookCategory('${catKey}')">${PRICES[catKey].label}</button>
+  `).join('');
+
+  const optionSelect = `
+    <select onchange="setBookOption(this.value)">
+      ${Object.keys(PRICES[bookState.category].options).map(k=>`<option value="${k}" ${k===bookState.option?'selected':''}>${k} — ${naira(PRICES[bookState.category].options[k])}</option>`).join('')}
+    </select>
+  `;
+
+  const extraChips = Object.keys(EXTRAS).map(e=>`
+    <button class="chip extra ${bookState.extras.includes(e)?'active':''}" onclick="toggleExtra('${e}')">${e} · ${naira(EXTRAS[e])}</button>
+  `).join('');
+
+  const rightPanel = bookState.submitted ? `
+    <div class="confirm-box">
+      <h3>Almost there!</h3>
+      <p>Tap below to send your request straight to WhatsApp — I'll confirm your exact appointment time there.</p>
+      <a class="btn-primary" style="display:block;text-align:center;" target="_blank" href="https://wa.me/message/VM3322AX2FEWG1?text=${encodeURIComponent(buildWaMessage(total))}">Send Request on WhatsApp</a>
+      <button class="edit-link" onclick="editBooking()">← Edit details</button>
+    </div>
+  ` : `
+    <form onsubmit="submitBooking(event)">
+      <label class="label">Your name</label>
+      <input required value="${bookState.name}" oninput="bookState.name=this.value" placeholder="e.g. Ada" />
+      <label class="label" style="margin-top:16px;">Preferred date</label>
+      <input type="date" value="${bookState.date}" oninput="bookState.date=this.value" />
+      <label class="label" style="margin-top:16px;">Anything else I should know?</label>
+      <textarea rows="4" oninput="bookState.notes=this.value" placeholder="Inspo pics, allergy notes, timing constraints...">${bookState.notes}</textarea>
+      <button type="submit" class="btn-primary" style="margin-top:20px;width:100%;border:none;">Review &amp; Send Request</button>
+    </form>
+  `;
+
+  return `
+    <div class="book-wrap">
+      <div class="eyebrow">BOOK YOUR SET</div>
+      <h1>Get your estimate</h1>
+      <p class="intro">Build your set below to see a live price, then send your request — I'll confirm your exact time on WhatsApp.</p>
+      <div class="book-grid">
+        <div>
+          <label class="label">Choose a technique</label>
+          <div class="chip-row">${categoryChips}</div>
+          <label class="label">Length / style</label>
+          ${optionSelect}
+          <label class="label" style="margin-top:22px;">Add extras (per nail)</label>
+          <div class="chip-row">${extraChips}</div>
+          <div class="total-box">
+            <div class="lbl">ESTIMATED TOTAL</div>
+            <div class="amt">${naira(total)}</div>
+            <div class="sub">${PRICES[bookState.category].label} (${bookState.option})${bookState.extras.length?` + ${bookState.extras.length} extra${bookState.extras.length>1?'s':''}`:''}</div>
+          </div>
+        </div>
+        <div>${rightPanel}</div>
+      </div>
+    </div>
+  `;
+}
+
+function buildWaMessage(total){
+  return `Hi Tobi! I'd like to book: ${PRICES[bookState.category].label} (${bookState.option})${bookState.extras.length?' + '+bookState.extras.join(', '):''}. Estimate: ${naira(total)}. Name: ${bookState.name||'—'}. Preferred date: ${bookState.date||'—'}. Notes: ${bookState.notes||'—'}`;
+}
+function setBookCategory(catKey){
+  bookState.category = catKey;
+  bookState.option = Object.keys(PRICES[catKey].options)[0];
+  renderApp();
+}
+function setBookOption(val){ bookState.option = val; renderApp(); }
+function toggleExtra(e){
+  const idx = bookState.extras.indexOf(e);
+  if(idx>-1) bookState.extras.splice(idx,1); else bookState.extras.push(e);
+  renderApp();
+}
+function submitBooking(ev){ ev.preventDefault(); bookState.submitted = true; renderApp(); }
+function editBooking(){ bookState.submitted = false; renderApp(); }
+
+/* ============ ROUTER ============ */
+function renderApp(){
+  const app = document.getElementById('app');
+  let html = '';
+  if(currentPage==='home') html = homeHTML();
+  else if(currentPage==='about') html = aboutHTML();
+  else if(currentPage==='services') html = servicesHTML();
+  else if(currentPage==='gallery') html = galleryHTML();
+  else if(currentPage==='academy') html = academyHTML();
+  else if(currentPage==='book') html = bookHTML();
+  app.innerHTML = html;
+}
+
+renderNav();
+renderApp();
+</script>
+</body>
+</html>
