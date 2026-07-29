@@ -131,6 +131,15 @@
   .chip.active{border-color:var(--pink);background:var(--pink);color:#fff;}
   .chip.extra{padding:7px 12px;font-size:12.5px;font-weight:400;}
   .chip.extra.active{background:var(--blush);color:var(--ink);border-color:var(--pink);}
+  .extras-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+  .extra-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:8px;border:1.5px solid var(--blush);background:#fff;}
+  .extra-row.active{border-color:var(--pink);background:var(--blush);}
+  .extra-name{font-size:13.5px;color:var(--ink);}
+  .extra-price{font-size:12px;color:var(--rose);}
+  .stepper{display:flex;align-items:center;gap:10px;}
+  .stepper button{width:26px;height:26px;border-radius:999px;border:1.5px solid var(--pink);background:#fff;color:var(--pink);font-size:15px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;}
+  .stepper button:active{background:var(--pink);color:#fff;}
+  .stepper .qty{min-width:18px;text-align:center;font-size:14px;font-weight:700;}
   select, input, textarea{width:100%;padding:11px 14px;border-radius:6px;border:1.5px solid var(--blush);font-size:14.5px;background:#fff;color:var(--ink);font-family:inherit;}
   textarea{resize:vertical;}
   .total-box{margin-top:26px;background:var(--ink);color:#fff;border-radius:8px;padding:20px 22px;}
@@ -425,12 +434,13 @@ function academyHTML(){
 }
 
 /* ============ BOOK (calculator + form) ============ */
-let bookState = { category:'gelx', option:null, extras:[], name:'', date:'', notes:'', submitted:false };
+let bookState = { category:'gelx', option:null, extras:{}, name:'', date:'', notes:'', submitted:false };
 bookState.option = Object.keys(PRICES[bookState.category].options)[0];
 
 function bookHTML(){
   const base = PRICES[bookState.category].options[bookState.option] || 0;
-  const extrasTotal = bookState.extras.reduce((s,e)=>s+EXTRAS[e],0);
+  const extrasTotal = Object.entries(bookState.extras).reduce((s,[name,qty])=>s+EXTRAS[name]*qty,0);
+  const extrasCount = Object.values(bookState.extras).reduce((s,qty)=>s+qty,0);
   const total = base + extrasTotal;
 
   const categoryChips = Object.keys(PRICES).map(catKey=>`
@@ -443,9 +453,18 @@ function bookHTML(){
     </select>
   `;
 
-  const extraChips = Object.keys(EXTRAS).map(e=>`
-    <button class="chip extra ${bookState.extras.includes(e)?'active':''}" onclick="toggleExtra('${e}')">${e} · ${naira(EXTRAS[e])}</button>
-  `).join('');
+  const extraChips = Object.keys(EXTRAS).map(e=>{
+    const qty = bookState.extras[e] || 0;
+    return `
+    <div class="extra-row ${qty>0?'active':''}">
+      <span class="extra-name">${e} <span class="extra-price">${naira(EXTRAS[e])}/nail</span></span>
+      <div class="stepper">
+        <button type="button" onclick="changeExtraQty('${e}', -1)" aria-label="Decrease">−</button>
+        <span class="qty">${qty}</span>
+        <button type="button" onclick="changeExtraQty('${e}', 1)" aria-label="Increase">+</button>
+      </div>
+    </div>`;
+  }).join('');
 
   const rightPanel = bookState.submitted ? `
     <div class="confirm-box">
@@ -477,12 +496,12 @@ function bookHTML(){
           <div class="chip-row">${categoryChips}</div>
           <label class="label">Length / style</label>
           ${optionSelect}
-          <label class="label" style="margin-top:22px;">Add extras (per nail)</label>
-          <div class="chip-row">${extraChips}</div>
+          <label class="label" style="margin-top:22px;">Add extras — set how many nails per design</label>
+          <div class="extras-list">${extraChips}</div>
           <div class="total-box">
             <div class="lbl">ESTIMATED TOTAL</div>
             <div class="amt">${naira(total)}</div>
-            <div class="sub">${PRICES[bookState.category].label} (${bookState.option})${bookState.extras.length?` + ${bookState.extras.length} extra${bookState.extras.length>1?'s':''}`:''}</div>
+            <div class="sub">${PRICES[bookState.category].label} (${bookState.option})${extrasCount?` + ${extrasCount} extra nail${extrasCount>1?'s':''}`:''}</div>
           </div>
         </div>
         <div>${rightPanel}</div>
@@ -492,7 +511,8 @@ function bookHTML(){
 }
 
 function buildWaMessage(total){
-  return `Hi Tobi! I'd like to book: ${PRICES[bookState.category].label} (${bookState.option})${bookState.extras.length?' + '+bookState.extras.join(', '):''}. Estimate: ${naira(total)}. Name: ${bookState.name||'—'}. Preferred date: ${bookState.date||'—'}. Notes: ${bookState.notes||'—'}`;
+  const extrasList = Object.entries(bookState.extras).filter(([,qty])=>qty>0).map(([name,qty])=>`${name} x${qty}`).join(', ');
+  return `Hi Tobi! I'd like to book: ${PRICES[bookState.category].label} (${bookState.option})${extrasList?' + '+extrasList:''}. Estimate: ${naira(total)}. Name: ${bookState.name||'—'}. Preferred date: ${bookState.date||'—'}. Notes: ${bookState.notes||'—'}`;
 }
 function setBookCategory(catKey){
   bookState.category = catKey;
@@ -500,9 +520,11 @@ function setBookCategory(catKey){
   renderApp();
 }
 function setBookOption(val){ bookState.option = val; renderApp(); }
-function toggleExtra(e){
-  const idx = bookState.extras.indexOf(e);
-  if(idx>-1) bookState.extras.splice(idx,1); else bookState.extras.push(e);
+function changeExtraQty(e, delta){
+  const current = bookState.extras[e] || 0;
+  const next = Math.max(0, Math.min(20, current + delta));
+  if(next === 0){ delete bookState.extras[e]; }
+  else { bookState.extras[e] = next; }
   renderApp();
 }
 function submitBooking(ev){ ev.preventDefault(); bookState.submitted = true; renderApp(); }
